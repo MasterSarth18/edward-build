@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111c18">
+<title>EDWARD BUILD — Physique Tracker</title>
+<style>
+:root{--bg:#101815;--panel:#18231e;--panel2:#202e27;--line:#2b3b32;--text:#edf4ee;--muted:#9aaca0;--green:#a8d5ae;--green2:#557f60;--lime:#d3e8a5;--gold:#e6bd72;--red:#e28f84;--shadow:0 16px 40px #0003}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 10% 0%,#24392d 0,transparent 36%),var(--bg);color:var(--text);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1080px;margin:auto;padding:22px 16px 60px}.hero{padding:25px;border:1px solid #3a5142;border-radius:24px;background:linear-gradient(125deg,#243b2e,#17251e 70%);box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;border:1px solid #ffffff18;right:-65px;top:-95px;box-shadow:0 0 0 28px #ffffff08,0 0 0 58px #ffffff05}
+.kicker{font-size:10px;letter-spacing:2.2px;text-transform:uppercase;color:var(--lime);font-weight:800}.hero h1{font-size:clamp(29px,6vw,46px);letter-spacing:-1.8px;line-height:1;margin:11px 0}.hero p{color:#c6d5ca;max-width:610px;margin:0}.hero-foot{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}.pill{border:1px solid #ffffff2b;color:#e5eee7;padding:7px 11px;border-radius:99px;font-size:12px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:15px 0 5px}.tab{background:transparent;color:var(--muted);border:1px solid var(--line);white-space:nowrap}.tab.active{background:var(--green);color:#132018;border-color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:13px 0}.card{background:linear-gradient(145deg,#1c2922,#17211c);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 7px 22px #0002;margin:12px 0}.metric-label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:750}.metric{font-size:27px;font-weight:850;letter-spacing:-1px;margin:4px 0}.unit{font-size:12px;color:var(--muted);font-weight:500}.section-title{font-size:18px;font-weight:800;margin:0 0 13px}.sub{font-size:12px;color:var(--muted)}.bar{height:8px;border-radius:99px;background:#2c3b32;overflow:hidden;margin:9px 0 4px}.bar span{height:100%;display:block;background:linear-gradient(90deg,var(--green2),var(--lime));border-radius:99px;width:0;transition:width .25s}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+button,input,select{font:inherit}button{border:0;border-radius:11px;padding:11px 14px;background:var(--green);color:#142019;font-weight:800;cursor:pointer}button:active{transform:scale(.98)}button.secondary{background:#293a30;color:var(--text);border:1px solid var(--line)}button.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}button.danger{background:#422b29;color:#ffc0b7}.smallbtn{padding:7px 10px;font-size:12px}
+input,select{background:#101a15;color:var(--text);border:1px solid #35483b;border-radius:10px;padding:11px;width:100%;min-width:0;outline:none}input:focus,select:focus{border-color:var(--green)}label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0 5px}.field{min-width:0}
+.food-form{display:grid;grid-template-columns:1.5fr .7fr .8fr auto;gap:9px;align-items:end}.meal-list{display:grid;gap:8px}.meal{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 12px;background:#111b16;border:1px solid var(--line);border-radius:12px}.meal strong{display:block}.meal small{color:var(--muted)}.meal .macros{text-align:right;font-size:12px;color:var(--muted)}.macroline{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px}.tag{font-size:11px;background:#27382e;color:#d9eadb;border-radius:99px;padding:3px 7px}
+.habit{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid var(--line)}.habit:last-child{border:0}.habit input{width:19px;height:19px;accent-color:#a8d5ae;margin-top:2px}.habit strong{display:block}.habit small{color:var(--muted)}
+.dateinput{max-width:180px}.chart{height:135px;display:flex;align-items:end;gap:8px;padding:12px 2px 0}.chartcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:end}.chartbar{width:100%;max-width:38px;min-height:3px;border-radius:7px 7px 2px 2px;background:linear-gradient(0deg,#547c5c,#cde5a3)}.chartcol small{font-size:10px;color:var(--muted)}
+.empty{padding:18px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px;font-size:13px}.note{background:#302b1d;border:1px solid #645333;color:#ead9ae;padding:12px;border-radius:12px;font-size:12px}.hide{display:none!important}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,1fr)}.food-form{grid-template-columns:1fr 1fr}.food-form .wide{grid-column:1/-1}.food-form button{grid-column:1/-1}.three{grid-template-columns:1fr 1fr}}
+@media(max-width:430px){.wrap{padding:13px 11px 45px}.hero{padding:21px}.two{grid-template-columns:1fr}.metric{font-size:24px}.card{padding:14px}}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="icons/icon-192.png">
+
+</head>
+<body><div class="wrap">
+<header class="hero">
+ <div class="kicker">Your transformation starts 01 December 2026</div>
+ <h1>EDWARD BUILD<span style="color:var(--lime)">.</span></h1>
+ <p>Build a healthy, slim and defined physique inspired by Edward Cullen in Twilight (2008). Focus on proportion, strength and steady progress — not getting thinner.</p>
+ <div class="hero-foot"><span class="pill">01 DEC 2026 · DAY 1</span><span class="pill">63 KG FINAL GOAL · 60 KG FIRST MILESTONE</span><span class="pill">Strength · Nutrition · Recovery</span></div>
+</header>
+<nav class="tabs">
+ <button class="tab active" data-tab="dashboard">Overview</button><button class="tab" data-tab="food">Food & macros</button><button class="tab" data-tab="habits">Daily habits</button><button class="tab" data-tab="progress">Progress</button>
+</nav>
+<div class="row" style="margin:8px 2px"><div><div class="sub">SELECT DAY</div><input id="date" class="dateinput" type="date" min="2026-12-01"></div><button class="secondary smallbtn" id="today">Go to today</button></div>
+
+<main id="dashboard">
+ <section class="card">
+  <div class="row"><div><div class="metric-label">Your physique target</div><h2 class="section-title" style="margin:5px 0">Edward Cullen · Twilight (2008)</h2></div><span class="tag">Slim & defined</span></div>
+  <div class="three">
+   <div><div class="metric">55–56</div><div class="sub">Starting kg</div></div>
+   <div><div class="metric">60</div><div class="sub">First milestone kg</div></div>
+   <div><div class="metric" style="color:var(--lime)">63</div><div class="sub">Final goal kg</div></div>
+  </div>
+  <p class="sub">Flexible reassessment range: 62–65 kg. Prioritise a slim waist, defined chest, shoulders, back and arms, with balanced legs. Your proportions and health matter more than hitting an exact number.</p>
+ </section>
+ <div class="grid">
+  <div class="card"><div class="metric-label">Calories</div><div class="metric" id="calTotal">0 <span class="unit">kcal</span></div><div class="sub" id="calGoalText">of 2,250 kcal</div><div class="bar"><span id="calBar"></span></div></div>
+  <div class="card"><div class="metric-label">Protein</div><div class="metric" id="proTotal">0 <span class="unit">g</span></div><div class="sub">Goal: 100 g</div><div class="bar"><span id="proBar"></span></div></div>
+  <div class="card"><div class="metric-label">Carbs</div><div class="metric" id="carbTotal">0 <span class="unit">g</span></div><div class="sub">Guide: ~290 g</div><div class="bar"><span id="carbBar"></span></div></div>
+  <div class="card"><div class="metric-label">Fat</div><div class="metric" id="fatTotal">0 <span class="unit">g</span></div><div class="sub">Guide: ~70 g</div><div class="bar"><span id="fatBar"></span></div></div>
+ </div>
+ <div class="two">
+  <section class="card"><div class="row"><h2 class="section-title">Today's score</h2><strong id="score">0%</strong></div><div class="bar"><span id="scoreBar"></span></div><div class="sub" id="scoreText">Complete your habits to build your streak.</div></section>
+  <section class="card"><div class="metric-label">Water tracker</div><div class="row"><div class="metric"><span id="waterTotal">0</span><span class="unit"> / 3 L</span></div><span>💧</span></div><div class="bar"><span id="waterBar"></span></div><div class="row"><button class="secondary smallbtn" id="waterMinus">− 250 ml</button><button class="smallbtn" id="waterPlus">+ 250 ml</button></div></section>
+ </div>
+ <section class="card"><h2 class="section-title">Today's food at a glance</h2><div id="todayMeals" class="meal-list"><div class="empty">No food logged yet. Add meals in Food & macros.</div></div><button class="secondary" style="margin-top:12px;width:100%" data-goto="food">＋ Log food</button></section>
+ <div class="note">Nutrition targets are starting estimates, not medical prescriptions. At 5'10" and 55–56 kg, your BMI is below the usual adult healthy range. Consider a healthcare check-up before pursuing a calorie surplus, especially if weight gain has been difficult.</div>
+</main>
+
+<main id="food" class="hide">
+ <section class="card">
+  <h2 class="section-title">Food diary <span class="sub">· nutrition auto-calculates</span></h2>
+  <div class="food-form">
+   <div class="field wide"><label>Choose food</label><select id="foodSelect"></select></div>
+   <div class="field"><label>Quantity (g/ml)</label><input id="qty" type="number" min="1" value="100"></div>
+   <div class="field"><label>Meal</label><select id="mealType"><option>Breakfast</option><option>Lunch</option><option>Snack</option><option>Dinner</option><option>Post-workout</option></select></div>
+   <button id="addFood">Add food</button>
+  </div>
+  <div class="sub" id="foodPreview" style="margin-top:9px">Select a food to preview its nutrition.</div>
+ </section>
+ <section class="card"><div class="row"><h2 class="section-title">Logged meals</h2><button class="ghost smallbtn" id="clearMeals">Clear day</button></div><div id="foodDiary" class="meal-list"></div></section>
+ <section class="card"><h2 class="section-title">Add your own food</h2><div class="two">
+  <div class="field"><label>Food name</label><input id="customName" placeholder="e.g. Homemade poha"></div>
+  <div class="field"><label>Serving basis</label><select id="customUnit"><option value="100g">Per 100 g</option><option value="100ml">Per 100 ml</option></select></div>
+  <div class="field"><label>Calories per 100</label><input id="customCal" type="number" min="0" placeholder="kcal"></div>
+  <div class="field"><label>Protein (g)</label><input id="customPro" type="number" min="0" step=".1"></div>
+  <div class="field"><label>Carbs (g)</label><input id="customCarb" type="number" min="0" step=".1"></div>
+  <div class="field"><label>Fat (g)</label><input id="customFat" type="number" min="0" step=".1"></div>
+ </div><button id="saveCustom" style="margin-top:12px">Save custom food</button><p class="sub">Use nutrition labels or a reliable food database for accurate values. Homemade recipes vary.</p></section>
+</main>
+
+<main id="habits" class="hide">
+ <section class="card"><div class="row"><h2 class="section-title">Daily routine & self-care checklist</h2><strong id="habitCount">0 / 8</strong></div><div id="habitList"></div></section>
+ <section class="card"><h2 class="section-title">Daily recovery notes</h2><div class="two">
+  <div class="field"><label>Sleep (hours)</label><input id="sleep" type="number" min="0" max="24" step=".5" placeholder="e.g. 8"></div>
+  <div class="field"><label>Morning body weight (kg)</label><input id="weightToday" type="number" min="30" max="200" step=".1" placeholder="optional"></div>
+ </div><div class="field" style="margin-top:10px"><label>Energy / mood / soreness / notes</label><input id="notes" placeholder="How did today feel?"></div><button id="saveDay" style="margin-top:12px">Save daily check-in</button><div class="sub" id="savedStatus" style="margin-top:8px">Changes are saved on this device.</div></section>
+</main>
+
+<main id="progress" class="hide">
+ <div class="grid">
+  <div class="card"><div class="metric-label">Current logged weight</div><div class="metric" id="latestWeight">—</div><div class="sub">kg</div></div>
+  <div class="card"><div class="metric-label">Final goal</div><div class="metric">63.0 <span class="unit">kg</span></div><div class="sub">Flexible range: 62–65 kg · first milestone: 60 kg</div></div>
+  <div class="card"><div class="metric-label">Days tracked</div><div class="metric" id="daysTracked">0</div><div class="sub">Days with saved records</div></div>
+  <div class="card"><div class="metric-label">Habit completion</div><div class="metric" id="avgHabits">0%</div><div class="sub">Average across tracked days</div></div>
+ </div>
+ <section class="card"><h2 class="section-title">Weight trend</h2><div id="weightChart" class="chart"></div><div id="weightRows" class="sub"></div></section>
+ <section class="card"><h2 class="section-title">Transformation timeline</h2><p class="sub">Official start: 1 December 2026 · First milestone: 60 kg · Final goal: 63 kg (reassess within 62–65 kg).</p></section><section class="card"><h2 class="section-title">Weekly review</h2><div id="weeklyReview" class="sub">Your weekly summary will appear as you log your days.</div></section>
+ <section class="card"><h2 class="section-title">Backup your records</h2><p class="sub">Data is stored in this browser on this device. Export a backup regularly. Import it later to restore or transfer records.</p><div class="row"><button id="export">Export backup</button><button class="secondary" id="import">Import backup</button><input id="file" type="file" accept="application/json" hidden></div><button class="danger smallbtn" id="reset" style="margin-top:12px">Delete all records</button></section>
+</main>
+</div>
+<script>
+const START='2026-12-01',KEY='leanBuildPlus_v2';
+const $=id=>document.getElementById(id);
+const todayISO=()=>{let d=new Date(Date.now()-new Date().getTimezoneOffset()*60000);return d.toISOString().slice(0,10)};
+const foods=[
+['Milk, whole',61,3.2,4.8,3.3],['Milk, toned',58,3,4.8,3],['Curd, plain',61,3.5,4.7,3.3],
+['Paneer',265,18.3,1.2,20.8],['Tofu',76,8,1.9,4.8],['Soy chunks, dry',345,52,33,0.5],['Dal, cooked',116,9,20,0.4],['Rajma, cooked',127,8.7,22.8,0.5],['Chickpeas, cooked',164,8.9,27.4,2.6],['Roasted chana',369,22,58,6],['Whole egg',143,12.6,0.7,9.5],['Chicken breast, cooked',165,31,0,3.6],['Rice, cooked',130,2.7,28.2,0.3],['Roti, plain',297,9,52,7],['Oats, dry',389,16.9,66.3,6.9],['Banana',89,1.1,22.8,0.3],['Peanut butter',588,25,20,50],['Almonds',579,21.2,21.6,49.9],['Bread, whole wheat',247,13,41,4.2],['Potato, boiled',87,1.9,20.1,0.1],['Poha, plain cooked',130,2.5,25,2],['Upma, cooked',150,4,25,4],['Idli',146,4.5,29,0.7],['Dosa, plain',168,4,28,4],['Apple',52,0.3,13.8,0.2],['Whey protein powder',400,80,8,6],['Sweet potato, boiled',86,1.6,20.1,0.1],['Mixed vegetables',65,2.5,12,0.5]
+];
+let db;try{db=JSON.parse(localStorage.getItem(KEY))||{days:{},weights:[],customFoods:[]}}catch(e){db={days:{},weights:[],customFoods:[]}}
+function dayKey(){return $('date').value}function getDay(){return db.days[dayKey()]||{items:[],habits:{},water:0,sleep:'',weight:'',notes:''}}
+function putDay(d){db.days[dayKey()]=d;persist()}function persist(){localStorage.setItem(KEY,JSON.stringify(db))}
+function allFoods(){return foods.concat(db.customFoods||[])}
+function totals(d){return (d.items||[]).reduce((a,x)=>{a.cal+=x.cal;a.pro+=x.pro;a.carb+=x.carb;a.fat+=x.fat;return a},{cal:0,pro:0,carb:0,fat:0})}
+function fmt(n){return Math.round(n*10)/10}
+function selectFood(){ $('foodSelect').innerHTML=allFoods().map((f,i)=>`<option value="${i}">${f[0]}</option>`).join('');preview()}
+function preview(){let f=allFoods()[Number($('foodSelect').value)]||foods[0],q=Number($('qty').value)||0;let n=f.slice(1).map(x=>x*q/100);$('foodPreview').textContent=`For ${q} g/ml: ${Math.round(n[0])} kcal · ${fmt(n[1])} g protein · ${fmt(n[2])} g carbs · ${fmt(n[3])} g fat`}
+function drawFood(){let d=getDay(),t=totals(d);$('calTotal').innerHTML=`${Math.round(t.cal)} <span class="unit">kcal</span>`;$('proTotal').innerHTML=`${fmt(t.pro)} <span class="unit">g</span>`;$('carbTotal').innerHTML=`${fmt(t.carb)} <span class="unit">g</span>`;$('fatTotal').innerHTML=`${fmt(t.fat)} <span class="unit">g</span>`;
+[['calBar',t.cal,2250],['proBar',t.pro,100],['carbBar',t.carb,290],['fatBar',t.fat,70]].forEach(([id,v,g])=>$(id).style.width=Math.min(100,v/g*100)+'%');
+let list=$('foodDiary');list.innerHTML='';if(!d.items.length)list.innerHTML='<div class="empty">No food logged for this date yet.</div>';d.items.forEach((x,i)=>{let el=document.createElement('div');el.className='meal';el.innerHTML=`<div><strong>${x.name}</strong><small>${x.meal} · ${x.qty} g/ml</small><div class="macroline"><span class="tag">${fmt(x.pro)}g protein</span><span class="tag">${fmt(x.carb)}g carbs</span><span class="tag">${fmt(x.fat)}g fat</span></div></div><div class="macros"><strong>${Math.round(x.cal)} kcal</strong><br><button class="danger smallbtn" data-remove="${i}" style="margin-top:7px">Remove</button></div>`;list.append(el)});
+list.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{let d=getDay();d.items.splice(+b.dataset.remove,1);putDay(d);refresh()});
+let today=$('todayMeals');today.innerHTML=d.items.length?d.items.map(x=>`<div class="row meal"><div><strong>${x.name}</strong><small>${x.meal} · ${x.qty}g</small></div><strong>${Math.round(x.cal)} kcal</strong></div>`).join(''):'<div class="empty">No food logged yet. Add meals in Food & macros.</div>';
+}
+const dailyTasks=[
+ ['workout','Complete planned strength workout','Monday, Wednesday and Friday. On other days, recovery is the task.'],
+ ['protein','Reach your protein target','Use the food diary to work towards your planned protein intake.'],
+ ['meals','Eat regular balanced meals','Include protein, carbohydrates, fruit/vegetables and enough energy.'],
+ ['waterHabit','Hydrate through the day','Use thirst, heat and exercise to guide fluid intake.'],
+ ['sleepHabit','Sleep 7–9 hours','Keep a consistent bedtime and wake-up routine.'],
+ ['movement','Walk or do gentle mobility','Keep rest days light; avoid exhausting extra cardio.'],
+ ['skinAM','Morning skincare','Gentle cleanse, moisturiser and broad-spectrum SPF 30+ sunscreen.'],
+ ['skinPM','Evening skincare','Cleanse gently and moisturise. Avoid adding multiple strong actives at once.'],
+ ['oralCare','Brush and floss','Brush twice daily with fluoride toothpaste; floss once daily.'],
+ ['hygiene','Personal hygiene & grooming','Shower as needed, wear clean clothes and keep nails tidy.'],
+ ['hairCare','Hair and scalp care','Use a gentle routine suited to your scalp; wash when needed, condition dry lengths.'],
+ ['plan','Plan tomorrow & wind down','Prepare meals/workout essentials and reduce screens before bed.']
+];
+function drawHabits(){let d=getDay(),arr=dailyTasks;
+$('habitList').innerHTML=arr.map(([id,title,desc])=>`<label class="habit"><input type="checkbox" data-habit="${id}" ${d.habits[id]?'checked':''}><span><strong>${title}</strong><small>${desc}</small></span></label>`).join('');
+$('habitList').querySelectorAll('[data-habit]').forEach(c=>c.onchange=()=>{let d=getDay();d.habits[c.dataset.habit]=c.checked;putDay(d);drawHabits();drawScore();drawProgress()});
+$('habitCount').textContent=arr.filter(x=>d.habits[x[0]]).length+' / '+arr.length;
+$('waterTotal').textContent=fmt(d.water||0);$('waterBar').style.width=Math.min(100,(d.water||0)/3*100)+'%';
+$('sleep').value=d.sleep||'';$('weightToday').value=d.weight||'';$('notes').value=d.notes||'';
+}
+function drawScore(){let d=getDay(),n=dailyTasks.filter(x=>d.habits?.[x[0]]).length,p=Math.round(n/dailyTasks.length*100);$('score').textContent=p+'%';$('scoreBar').style.width=p+'%';$('scoreText').textContent=p===100?'All daily tasks completed — excellent consistency.':`${n} of ${dailyTasks.length} daily tasks completed.`}
+function drawProgress(){let entries=Object.entries(db.days).sort((a,b)=>a[0].localeCompare(b[0])),weights=entries.filter(([k,d])=>d.weight).map(([date,d])=>({date,weight:+d.weight})).concat(db.weights||[]).sort((a,b)=>a.date.localeCompare(b.date));let latest=weights.at(-1);$('latestWeight').textContent=latest?latest.weight.toFixed(1):'—';$('daysTracked').textContent=entries.length;let avg=entries.length?Math.round(entries.reduce((s,[k,d])=>s+dailyTasks.filter(x=>d.habits?.[x[0]]).length/dailyTasks.length,0)/entries.length*100):0;$('avgHabits').textContent=avg+'%';
+let chart=$('weightChart');chart.innerHTML='';let last=weights.slice(-8),min=last.length?Math.min(...last.map(x=>x.weight))-1:0,max=last.length?Math.max(...last.map(x=>x.weight))+1:1;last.forEach(w=>{let c=document.createElement('div');c.className='chartcol';let h=document.createElement('div');h.className='chartbar';h.style.height=(20+(w.weight-min)/(max-min)*75)+'%';let lab=document.createElement('small');lab.textContent=w.date.slice(5);let val=document.createElement('small');val.textContent=w.weight; c.append(h,val,lab);chart.append(c)});if(!last.length)chart.innerHTML='<div class="empty" style="width:100%">Log your morning weight to see your trend.</div>';
+$('weightRows').textContent=weights.length?weights.slice(-5).reverse().map(w=>`${w.date}: ${w.weight} kg`).join('  ·  '):'No weight entries yet.';
+let wk=entries.slice(-7);$('weeklyReview').textContent=wk.length?`${wk.length} days recorded · ${wk.reduce((s,[k,d])=>s+dailyTasks.filter(x=>d.habits?.[x[0]]).length,0)} habits completed · ${Math.round(wk.reduce((s,[k,d])=>s+totals(d).pro,0)/wk.length)} g average daily protein logged.`:'Log at least one day to start your review.';
+}
+function refresh(){drawFood();drawHabits();drawScore();drawProgress()}
+function showTab(name){document.querySelectorAll('main').forEach(x=>x.classList.toggle('hide',x.id!==name));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===name))}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>showTab(b.dataset.goto));
+$('date').value=todayISO()<START?START:todayISO();$('date').min=START;$('today').onclick=()=>{$('date').value=todayISO()<START?START:todayISO();refresh()};
+$('date').onchange=()=>refresh();$('foodSelect').onchange=preview;$('qty').oninput=preview;
+$('addFood').onclick=()=>{let f=allFoods()[+$('foodSelect').value],q=+$('qty').value;if(!f||q<=0){alert('Enter a valid quantity.');return}let d=getDay(),v=f.slice(1).map(x=>x*q/100);d.items.push({name:f[0],qty:q,meal:$('mealType').value,cal:v[0],pro:v[1],carb:v[2],fat:v[3]});putDay(d);refresh();$('qty').value=100;preview()};
+$('clearMeals').onclick=()=>{if(confirm('Remove all food entries for this date?')){let d=getDay();d.items=[];putDay(d);refresh()}};
+$('waterPlus').onclick=()=>{let d=getDay();d.water=fmt((d.water||0)+.25);putDay(d);refresh()};$('waterMinus').onclick=()=>{let d=getDay();d.water=Math.max(0,fmt((d.water||0)-.25));putDay(d);refresh()};
+$('saveDay').onclick=()=>{let d=getDay();d.sleep=$('sleep').value;d.weight=$('weightToday').value;d.notes=$('notes').value;putDay(d);$('savedStatus').textContent='Saved for '+dayKey()+'.';refresh()};
+$('saveCustom').onclick=()=>{let name=$('customName').value.trim(),vals=['customCal','customPro','customCarb','customFat'].map(id=>Number($(id).value));if(!name||vals.some(x=>!Number.isFinite(x)||x<0)){alert('Enter a food name and valid nutrition values.');return}db.customFoods.push([name,...vals]);persist();$('customName').value='';['customCal','customPro','customCarb','customFat'].forEach(id=>$(id).value='');selectFood();alert('Custom food saved.')};
+$('export').onclick=()=>{let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.href=u;a.download='lean-build-backup-'+todayISO()+'.json';a.click();URL.revokeObjectURL(u)};
+$('import').onclick=()=>$('file').click();$('file').onchange=async e=>{try{let x=JSON.parse(await e.target.files[0].text());if(!x.days||!Array.isArray(x.customFoods||[]))throw 0;db=x;persist();selectFood();refresh();alert('Backup restored.')}catch(err){alert('Could not read this backup.')}e.target.value=''};
+$('reset').onclick=()=>{if(confirm('Permanently clear all tracker data in this browser? Export a backup first if needed.')){db={days:{},weights:[],customFoods:[]};persist();selectFood();refresh()}};
+selectFood();refresh();
+</script>
+<div id="installPrompt" style="position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:none;background:#20352a;border:1px solid #557f60;color:#edf4ee;border-radius:16px;padding:14px;box-shadow:0 12px 35px #0008;font:14px system-ui">
+ <div style="display:flex;gap:12px;align-items:center">
+  <div style="flex:1"><strong>Install Edward Build</strong><div style="font-size:12px;color:#c4d5c9;margin-top:3px">Add your tracker to your home screen for app-like access.</div></div>
+  <button id="installAppBtn" style="background:#a8d5ae;color:#142019;border:0;border-radius:10px;padding:10px 12px;font-weight:800">Install</button>
+  <button id="closeInstallPrompt" aria-label="Close" style="background:transparent;color:#edf4ee;border:0;padding:7px">✕</button>
+ </div>
+</div>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+let deferredInstallPrompt = null;
+const installPromptBox = document.getElementById('installPrompt');
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  if (installPromptBox) installPromptBox.style.display = 'block';
+});
+document.getElementById('installAppBtn')?.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  installPromptBox.style.display = 'none';
+});
+document.getElementById('closeInstallPrompt')?.addEventListener('click', () => {
+  installPromptBox.style.display = 'none';
+});
+</script>
+
+</body></html>
